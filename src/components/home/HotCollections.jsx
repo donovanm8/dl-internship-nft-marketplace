@@ -29,16 +29,16 @@ const HotCollections = () => {
     nav: true,
     responsive: {
       0: {
-        items: 1, // Show 1 item on screens smaller than 576px
+        items: 1,
       },
       576: {
-        items: 1, // Show 2 items on screens equal to or larger than 576px
+        items: 1,
       },
       768: {
-        items: 2, // Show 3 items on screens equal to or larger than 768px
+        items: 2,
       },
       992: {
-        items: 3, // Show 4 items on screens equal to or larger than 992px
+        items: 3,
       },
       1200: {
         items: 4
