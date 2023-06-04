@@ -1,57 +1,35 @@
-import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import Timer from "../../miscellaneous/Timer";
 import { carouselOptions } from "../../miscellaneous/carousel";
-import Skeleton from "../UI/Skeleton";
-import NewItem from "../UI/NewItem";
 
-const NewItems = () => {
-  const [newItems, setNewItems] = useState([]);
-  const [loading, setLoading] = useState(false)
-  useEffect(() => {
-    async function fetchNewItems() {
-      setLoading(true)
-      const { data } = await axios.get(
-        "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems"
-      );
-      setNewItems(data);
-      setLoading(false)
-    }
-    fetchNewItems();
-  }, []);
-
-  return (
-    <section id="section-items" className="no-bottom">
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="text-center">
-              <h2>New Items</h2>
-              <div className="small-border bg-color-2"></div>
-            </div>
-          </div>
-            {!loading ? <NewItem newItems={newItems}/> :(<OwlCarousel {...carouselOptions}>
-              {new Array(6).fill().map((item, index) => (
+export default function NewItem ({newItems}){
+    return (
+        <OwlCarousel {...carouselOptions}>
+              {newItems.map((item, index) => (
                 <div
                   className="col-lg-12 col-md-12 col-sm-12 col-xs-12"
-                  key={""}
+                  key={item.id}
                 >
                   <div className="nft__item">
                     <div className="author_list_pp">
                       <Link
-                        to={`/author`}
+                        to={`/author/${item.authorId}`}
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         title="Creator: Monica Lucas"
                       >
-                        <Skeleton width={"50px"} height={"50px"} borderRadius={"99px"}/>
+                        <img className="lazy" src={item.authorImage} alt="" />
                         <i className="fa fa-check"></i>
                       </Link>
                     </div>
+                    {item.expiryDate ? (
+                      <div className="de_countdown">
+                        <Timer timeLeftInMs={item.expiryDate} />
+                      </div>
+                    ) : null}
                     <div className="nft__item_wrap">
                       <div className="nft__item_extra">
                         <div className="nft__item_buttons">
@@ -71,36 +49,27 @@ const NewItems = () => {
                         </div>
                       </div>
 
-                      <Link to={`/item-details/${""}`}>
+                      <Link to={`/item-details/${item.nftId}`}>
                         <img
-                          src={""}
+                          src={item.nftImage}
                           className="lazy nft__item_preview"
                           alt=""
                         />
-                        <Skeleton width={"100%"} height={"350px"}/>
                       </Link>
                     </div>
                     <div className="nft__item_info">
                       <Link to="/item-details">
-                        <h4>
-                          <Skeleton width={"60%"} height={"30px"}/>
-                        </h4>
+                        <h4>{item.title}</h4>
                       </Link>
-                      <div className="nft__item_price">
-                        <Skeleton width={"30%"} height={"20px"}/>
-                      </div>
+                      <div className="nft__item_price">{item.price} ETH</div>
                       <div className="nft__item_like">
-                          <Skeleton width={"40px"} height={"15px"}/>
+                        <i className="fa fa-heart"></i>
+                        <span>{item.likes}</span>
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
-            </OwlCarousel>)}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default NewItems;
+            </OwlCarousel>
+    )
+}
