@@ -38,7 +38,7 @@ const NewItems = () => {
               {new Array(6).fill().map((item, index) => (
                 <div
                   className="col-lg-12 col-md-12 col-sm-12 col-xs-12"
-                  key={""}
+                  key={index}
                 >
                   <div className="nft__item">
                     <div className="author_list_pp">
@@ -77,7 +77,7 @@ const NewItems = () => {
                           className="lazy nft__item_preview"
                           alt=""
                         />
-                        <Skeleton width={"100%"} height={"350px"}/>
+                        <Skeleton width={"100%"} height={"300px"}/>
                       </Link>
                     </div>
                     <div className="nft__item_info">
